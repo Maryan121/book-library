@@ -4,103 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/f22559516b.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./css/main.css">
     <title>book infomation library</title>
 </head>
 <body>
-    <style>
-        body {
-            text-align: center;
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        h1 {
-            text-transform: capitalize;
-            margin: 6rem auto;
-            margin-bottom: 0;
-        }
-
-        form {
-            width: 90%;
-            display: flex;
-            justify-content: center;
-            padding: 1rem;
-            margin: 3rem auto;
-            flex-direction: column;
-        }
-
-        input {
-            font-size: 1.8rem;
-            padding: .5rem 1rem;
-
-        }
-
-        input:hover,
-        input:focus {
-            outline: none;
-        }
-
-        button {
-            display: block;
-            /* margin: 0 auto; */
-            color: white;
-            background-color: rgb(91, 91, 239);
-            border: none;
-            padding: .5rem 1rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: .3s ease-in-out;
-            align-self: flex-end;
-            justify-self: flex-end;
-        }
-
-        button:hover,
-        button:focus {
-            background-color: rgb(47, 47, 245);
-        }
-
-        p {
-            font-size: 1.4rem;
-            width: 90%;
-            margin: 0 auto;
-            line-height: 2rem;
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-            margin: 0 auto;
-            /* box-shadow: 0px 0px 10px white; */
-            margin-top: 1rem;
-            display: none;
-        }
-        @media(min-width:850px){
-            form{
-                flex-direction: row;
-            }
-
-            p{
-                width: 60%;
-            }
-            button{
-                align-self: normal;
-            }
-        }
-        .bold{
-            /* color: white; */
-            position: absolute;
-            top: 4%;
-            right: 7%;
-            box-shadow: 0px 0px 10px rgba(121, 121, 122, 0.623);
-            padding: .5rem;
-            font-size: 1.5rem;
-            transition: .3 ease-in-out;
-            cursor: pointer;
-            border-radius: .4rem;
-        }
-        .bold:hover, .bold:focus{
-            opacity: .8;
-        }
-    </style>
     <div class="container">
         <h1> Search any book information </h1>
         <i class="fa-solid fa-moon bold " id="toDarkThemeBtn"></i>
@@ -113,82 +20,7 @@
         <img id="bookImage" alt="Book Cover"> 
     </div>
 
-    
-   
+   <script src="./js/main.js"></script>
 
-    <script>
-        const input = document.querySelector('input');
-        const btn = document.querySelector('button');
-        const descrip = document.querySelector('p');
-        const bookImage = document.getElementById('bookImage');
-
-        function search(e) {
-            e.preventDefault();
-
-            if (input.value === '') {
-                descrip.innerHTML = 'Please enter a book name';
-                setTimeout(() => {
-                    descrip.innerHTML = '';
-                }, 3000);
-                return;
-            }
-
-            const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(input.value)}`;
-
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.totalItems > 0) {
-                        bookImage.style.display = 'block';
-                        const bookInfo = data.items[0].volumeInfo;
-                        const title = bookInfo.title || 'Unknown Title';
-                        const author = bookInfo.authors ? bookInfo.authors[0] : 'Unknown Author';
-                        const year = bookInfo.publishedDate ? new Date(bookInfo.publishedDate).getFullYear() : 'Unknown Year';
-                        const imageLink = bookInfo.imageLinks ? bookInfo.imageLinks.thumbnail : null;
-
-                        descrip.innerHTML = `'${title}' by ${author} was released in the year ${year}`;
-                        if (imageLink) {
-                            bookImage.src = imageLink;
-                        } else {
-                            bookImage.src = ''; // Clear the image if not available
-                        }
-                    } else {
-                        descrip.innerHTML = `Sorry! We don't have that book yet`;
-                        bookImage.src = ''; // Clear the image if not available
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching book information:', error);
-                    descrip.innerHTML = 'An error occurred while fetching book information';
-                    bookImage.src = ''; // Clear the image if an error occurs
-                });
-        }
-
-        btn.addEventListener('click', search);
-
-        const ToDarkThemeBtn = document.querySelector('#toDarkThemeBtn')
-        const toLightThemeBtn = document.querySelector('#toLightThemeBtn')
-
-        const toDarkTheme = () => {
-            document.querySelector('body').style.backgroundColor = ' rgb(4, 4, 15)'
-            document.querySelector('.container').style.color = '#fff'
-            toLightThemeBtn.style.display = 'block'            
-            ToDarkThemeBtn.style.display = 'none'
-
-        }
-
-        ToDarkThemeBtn.addEventListener('click',toDarkTheme)
-
-        const toLightTheme = () => {
-            document.querySelector('body').style.backgroundColor = 'white'
-            document.querySelector('.container').style.color = '#000'
-            ToDarkThemeBtn.style.display = 'block'
-            toLightThemeBtn.style.display = 'none'
-        }
-
-        toLightThemeBtn.addEventListener('click',toLightTheme)
-
-        // function 
-    </script>
 </body>
 </html>
